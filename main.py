@@ -32,17 +32,22 @@ class Movies(db.Model):
         return f'<Book {self.title}>'
 
 
-#CREATE RECORD
+# # CREATE RECORD
 # movie_data = Movies(title="Phone Booth", year=2002, description="Publicist Stuart Shepard finds himself trapped in a phone booth, pinned down by an extortionist's sniper rifle. Unable to leave or receive outside help, Stuart's negotiation with the caller leads to a jaw-dropping climax.", rating=7.3, ranking=10, review="My favourite character was the caller.", image_url="https://image.tmdb.org/t/p/w500/tjrX2oWRCM3Tvarz38zlZM7Uc10.jpg")   
 # db.session.add(movie_data)
 # db.create_all()    
 # db.session.commit()
 
-#CREATE FORM
+#CREATE UPDATE FORM
 class UpdateForm(FlaskForm):
     rating = FloatField('Your Rating out of 10 e.g. 7.5)', validators=[DataRequired()])
     review = StringField('Your Review', validators=[DataRequired()])
     submit = SubmitField('Done')
+
+#CREATE ADD FORM
+class AddForm(FlaskForm):
+    add = StringField('Movie Title', validators=[DataRequired()])
+    submit = SubmitField('Add Movie')
 
 
 @app.route("/")
@@ -77,6 +82,11 @@ def delete():
     db.session.delete(movie_to_delete)
     db.session.commit()
     return redirect(url_for('home'))
+
+@app.route("/add")
+def add():
+    form = AddForm()
+    return render_template('add.html', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
