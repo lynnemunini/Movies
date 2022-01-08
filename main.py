@@ -25,12 +25,18 @@ class Movies(db.Model):
     rating = db.Column(db.Float, nullable=False)
     ranking = db.Column(db.Integer, nullable=False)
     review = db.Column(db.String, nullable=False)
-    image_url = db.Column(db.String, unique=True, nullable=False)
+    image_url = db.Column(db.String, nullable=False)
 
-    #Optional: this will allow each book object to be identified by its title when printed.
+    #Optional: this will allow each Movie object to be identified by its title when printed.
     def __repr__(self):
         return f'<Book {self.title}>'
 
+
+#CREATE RECORD
+# movie_data = Movies(title="Phone Booth", year=2002, description="Publicist Stuart Shepard finds himself trapped in a phone booth, pinned down by an extortionist's sniper rifle. Unable to leave or receive outside help, Stuart's negotiation with the caller leads to a jaw-dropping climax.", rating=7.3, ranking=10, review="My favourite character was the caller.", image_url="https://image.tmdb.org/t/p/w500/tjrX2oWRCM3Tvarz38zlZM7Uc10.jpg")   
+# db.session.add(movie_data)
+# db.create_all()    
+# db.session.commit()
 
 @app.route("/")
 def home():
