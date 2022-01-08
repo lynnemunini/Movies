@@ -40,7 +40,10 @@ class Movies(db.Model):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    #Read all books from the database
+    all_movies = db.session.query(Movies).all()
+    # print(all_movies)
+    return render_template("index.html", movies=all_movies)
 
 
 if __name__ == '__main__':
