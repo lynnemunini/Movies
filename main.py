@@ -60,7 +60,7 @@ class AddForm(FlaskForm):
 def home():
     #Read all books from the database
     # all_movies = db.session.query(Movies).all()
-    all_movies = db.session.query(Movies).order_by(desc(Movies.rating))
+    all_movies = db.session.query(Movies).order_by(desc(Movies.rating)) 
     print(all_movies)
     return render_template("index.html", movies=all_movies)
 
@@ -68,13 +68,15 @@ def home():
 @app.route("/edit", methods=["GET", "POST"])
 def edit():
     form = UpdateForm()
-    movie_id = request.args.get('id')
+    
     if form.validate_on_submit():
         movie_rating = request.form["rating"]
         movie_review = request.form["review"]
+        movie_id = request.args.get('id')
         movie_to_update = Movies.query.get(movie_id)
         movie_to_update.rating = movie_rating if movie_to_update.rating is None else movie_rating
         movie_to_update.review = movie_review if movie_to_update.review is None else movie_review
+        movie_to_update.ranking = movie_id if movie_to_update.ranking is None else movie_id
         db.session.commit()
         return redirect(url_for("home"))
 
@@ -128,7 +130,9 @@ def get_movie():
     db.session.add(movie_data)
     db.create_all()    
     db.session.commit()
-    return redirect(url_for('edit'))
+    movie_to_add = Movies.query.filter_by(title=title).first()
+    movie_id = movie_to_add.id
+    return redirect(url_for('edit', id=movie_id))
 
 
 if __name__ == '__main__':
