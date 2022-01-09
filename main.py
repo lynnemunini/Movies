@@ -60,8 +60,12 @@ class AddForm(FlaskForm):
 def home():
     #Read all books from the database
     # all_movies = db.session.query(Movies).all()
-    all_movies = db.session.query(Movies).order_by(desc(Movies.rating)) 
-    print(all_movies)
+    all_movies = db.session.query(Movies).order_by(Movies.rating).all()
+    #loop through all the movies
+    for i in range(len(all_movies)):
+        #This line gives each movie a new ranking reversed from their order in all_movies
+        all_movies[i].ranking = len(all_movies) - i
+    db.session.commit()
     return render_template("index.html", movies=all_movies)
 
 
@@ -76,7 +80,6 @@ def edit():
         movie_to_update = Movies.query.get(movie_id)
         movie_to_update.rating = movie_rating if movie_to_update.rating is None else movie_rating
         movie_to_update.review = movie_review if movie_to_update.review is None else movie_review
-        movie_to_update.ranking = movie_id if movie_to_update.ranking is None else movie_id
         db.session.commit()
         return redirect(url_for("home"))
 
