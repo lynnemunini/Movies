@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FloatField, IntegerField
 from wtforms.validators import DataRequired
 import requests
+from sqlalchemy import desc
 from pprint import pprint
 
 app = Flask(__name__)
@@ -58,8 +59,9 @@ class AddForm(FlaskForm):
 @app.route("/")
 def home():
     #Read all books from the database
-    all_movies = db.session.query(Movies).all()
-    # print(all_movies)
+    # all_movies = db.session.query(Movies).all()
+    all_movies = db.session.query(Movies).order_by(desc(Movies.rating))
+    print(all_movies)
     return render_template("index.html", movies=all_movies)
 
 
